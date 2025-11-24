@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aulas - GYM Hub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+  <a href="index-logado.html" class="logo">GYM<span>Hub</span></a>
+    <nav class="top-right">
+      <button type="button" class="btn outline" onclick="window.history.back()">Voltar</button>
+      <button class="btn outline" id="btn-logout">Sair</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Agende suas Aulas (até 5 por dia)</h1>
+    <div class="days-grid" id="days-grid">
+      <!-- Days will be injected by JS -->
+    </div>
+
+    <h2>Exercícios por membro</h2>
+    <div class="exercises-grid" id="exercises-grid">
+      <!-- Exercises injected by JS -->
+    </div>
+
+  <div style="height:40px"></div>
+  <button id="btn-save-aula" class="btn">Salvar</button>
+  <p id="save-msg" class="msg"></p>
+  </main>
+
+  <script src="main.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadastrar - GY MHub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <h2>Cadastrar</h2>
+    <!-- <form id="register-form" novalidate>
+      <label>Login <input type="text" id="reg-login" required></label>
+      <label>Senha <input type="password" id="reg-password" required minlength="6"></label>
+      <label>Email <input type="email" id="reg-email" placeholder="exemplo@email.com" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"></label>
+      <label>CPF <input type="text" id="reg-cpf" placeholder="000.000.000-00" required pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" inputmode="numeric"></label>
+      <label>Endereço <input type="text" id="reg-endereco" required></label>
+      <label>Data de Nascimento <input type="date" id="reg-dob" required></label>
+
+      <div class="form-actions">
+        <button type="button" class="btn outline" id="btn-back" onclick="window.history.back()">Voltar</button>
+        <button type="submit" class="btn" id="btn-create">Cadastrar</button>
+      </div>
+      <p id="reg-msg" class="msg"></p>
+    </form> -->
+
+    <form onsubmit="registerUser(event)">
+      <input id="name" type="text" placeholder="Nome" required>
+      <input id="email" type="email" placeholder="E-mail" required>
+      <input id="password" type="password" placeholder="Senha" required>
+      <button type="submit" class="btn">Cadastrar</button>
+    </form>
+
+  </div>
+
+  <!-- <script src="auth.js"></script> -->
+  <script src="register.js"></script>
+  
+<!--   <script>
+    document.getElementById('reg-cpf').addEventListener('input', function(e) {
+      let v = e.target.value.replace(/\D/g, '');
+      if(v.length > 11) v = v.slice(0,11);
+      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+      e.target.value = v;
+    });
+  </script> -->
+</body>
+</html>

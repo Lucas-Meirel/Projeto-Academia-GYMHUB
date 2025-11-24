@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Planos - GYM Hub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+      <a href="index-logado.html" class="logo">GYM<span>Hub</span></a>
+    <nav class="top-right">
+      <button class="btn" onclick="window.open('aula.html','_self')">Aulas</button>
+      <button class="btn outline" id="btn-logout">Sair</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="titulo">
+      <h1>Escolha seu Plano</h1>
+    </div>
+    <div class="plans-grid">
+      <div class="plan card">
+        <h3>Mensal</h3>
+        <p class="price">R$ 79 / mês</p>
+        <ul>
+          <li>Acesso ilimitado à musculação</li>
+          <li>1 avaliação física gratuita</li>
+          <li>Suporte por chat</li>
+        </ul>
+        <button class="btn plan-btn" data-plan="Mensal">Assinar</button>
+      </div>
+      <div class="plan card highlight">
+        <h3>Semestral</h3>
+        <p class="price">R$ 400 (6 meses)</p>
+        <ul>
+          <li>Desconto de 15%</li>
+          <li>2 avaliações físicas</li>
+          <li>Acesso a aulas em grupo</li>
+        </ul>
+        <button class="btn plan-btn" data-plan="Semestral">Assinar</button>
+      </div>
+      <div class="plan card">
+        <h3>Anual</h3>
+        <p class="price">R$ 700 / ano</p>
+        <ul>
+          <li>Desconto de 30%</li>
+          <li>3 avaliações e plano nutricional</li>
+          <li>Convites para eventos</li>
+        </ul>
+        <button class="btn plan-btn" data-plan="Anual">Assinar</button>
+      </div>
+      <div class="plan card premium">
+        <h3>Premium</h3>
+        <p class="price">R$ 149 / mês</p>
+        <ul>
+          <li>Personal trainer 1x por semana</li>
+          <li>Acesso VIP a todas as aulas</li>
+          <li>Descontos em parceiros</li>
+        </ul>
+        <button class="btn plan-btn" data-plan="Premium">Assinar</button>
+      </div>
+    </div>
+
+    <h2>Minhas escolhas</h2>
+    <div id="my-choices" class="card" style="margin-top:1rem;padding:1rem;background:#1a1a1a;border-radius:10px;"></div>
+
+    <div style="height:40px"></div>
+  </main>
+  <div id="footer"></div>
+  <script>
+    fetch('footer.html')
+      .then(res => res.text())
+      .then(html => { document.getElementById('footer').innerHTML = html; });
+  </script>
+
+  <script src="main.js"></script>
+  <script src="auth.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const planButtons = document.querySelectorAll('.plan-btn');
+  const plansGrid = document.querySelector('.plans-grid');
+  const myChoices = document.getElementById('my-choices');
+  const titulo = document.querySelector('.titulo h1');
+
+  // Try to load current user from backend (by stored id). If not found, fallback to localStorage.
+  (async function loadCurrentUser(){
+    let id = null;
+    try { id = Number(localStorage.getItem('id')) || null; } catch(e){ id = null; }
+    let currentUser = null;
+    if (id) {
+      try {
+        const res = await fetch('http://localhost:3000/api/auth/user/' + id);
+        if (res.ok) {
+          const data = await res.json();
+          // Normalize shape for frontend: use 'login' and 'plan' fields
+          currentUser = { id: data.id, login: data.name, plan: (data.planos && data.planos.length? data.planos[0]: null), days: data.dias || [], exercises: data.aulas || [] };
+          localStorage.setItem('gym_current_user', JSON.stringify(currentUser));
+        }
+      } catch(e) { /* ignore */ }
+    }
+
+    if (!currentUser) {
+      currentUser = JSON.parse(localStorage.getItem('gym_current_user') || 'null');
+    }
+
+    // Always show the plans grid so the user can change plans later.
+    // Render current choices into the `#my-choices` area.
+    const renderMyChoices = (cu) => {
+      const el = document.getElementById('my-choices');
+      if (!el) return;
+      const name = cu && (cu.login || cu.name) ? (cu.login || cu.name) : '—';
+      const plan = cu && cu.plan ? cu.plan : '—';
+      const days = cu && cu.days && cu.days.length ? cu.days.join(', ') : '—';
+      const exercises = cu && cu.exercises && cu.exercises.length ? cu.exercises.join(', ') : '—';
+      el.innerHTML = '<p><strong>Usuário:</strong> ' + name + '</p>' +
+                     ('<p><strong>Plano:</strong> ' + plan + '</p>') +
+                     ('<p><strong>Dias:</strong> ' + days + '</p>') +
+                     ('<p><strong>Exercícios:</strong> ' + exercises + '</p>');
+    };
+
+    if (currentUser) renderMyChoices(currentUser);
+
+    planButtons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const selectedPlan = button.getAttribute('data-plan');
+        // prefer backend update: send planos as single-item array
+        let idToUse = id || (currentUser && currentUser.id) || null;
+        if (!idToUse) {
+          alert('Usuário não identificado. Faça login.');
+          return;
+        }
+        try {
+          const res = await fetch('http://localhost:3000/api/aulas/registerAula', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: idToUse, planos: [selectedPlan] })
+          });
+          const resp = await res.json();
+          if (res.ok) {
+              // update local view without reloading
+              const updated = Object.assign({}, currentUser || {}, { id: idToUse, login: currentUser && currentUser.login || null, plan: selectedPlan });
+              localStorage.setItem('gym_current_user', JSON.stringify(updated));
+              renderMyChoices(updated);
+              // visually mark selected plan button
+              planButtons.forEach(b => b.classList.toggle('active', b.getAttribute('data-plan') === selectedPlan));
+              // alert the user which plan was selected
+              alert('Plano selecionado: ' + selectedPlan);
+            } else {
+            alert(resp.error || 'Falha ao salvar plano');
+          }
+        } catch (e) {
+          alert('Erro de comunicação com o servidor');
+        }
+      });
+    });
+  })();
+});
+</script>
+</body>
+</html>

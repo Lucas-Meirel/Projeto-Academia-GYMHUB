@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Academia - Home</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+  <a href="index.html" class="logo">GYM<span>Hub</span></a>
+    <nav class="top-right">
+      <button class="btn outline" id="btn-register" onclick="window.open('register.html','_self')">Cadastrar</button>
+      <button class="btn" id="btn-login" onclick="window.open('login.html','_self')">Login</button>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <div class="hero-content">
+      <h1>Saúde em primeiro lugar</h1>
+      <p class="lead">Praticar exercícios físicos melhora o humor, a saúde cardiovascular, aumenta a energia diária e contribui para um sono mais profundo.
+      Venha fazer parte da nossa comunidade!</p>
+      <div class="benefits-grid">
+        <a class="benefit" href="https://www.youtube.com/watch?v=kZDvg92tTMc" target="_blank">
+          <h3>Cardiovascular</h3>
+          <p>Aumenta a resistência e protege o coração.</p>
+        </a>
+        <a class="benefit" href="https://www.youtube.com/watch?v=D8nuuuUQUT0" target="_blank">
+          <h3>Hipertrofia</h3>
+          <p>Construção muscular e fortalecimento ósseo.</p>
+        </a>
+        <a class="benefit" href="https://www.youtube.com/watch?v=seMaVNY5hIo" target="_blank">
+          <h3>Flexibilidade</h3>
+          <p>Melhora a mobilidade e reduz lesões.</p>
+        </a>
+        <a class="benefit" href="https://www.youtube.com/watch?v=VyFQaLvTc_U" target="_blank">
+          <h3>Bem-estar</h3>
+          <p>Redução do estresse e melhora da autoestima.</p>
+        </a>
+      </div>
+    </div>
+    <div class="hero-image" role="img" aria-label="foto de academia">
+      <img src="assets/gym.jpg" alt="Foto da academia">
+    </div>
+  </main>
+
+  <div id="footer"></div>
+  <div id="chat-container">
+        <div id="chat-log"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Digite sua mensagem...">
+            <button id="send-button" title="Enviar mensagem"></button>
+        </div>
+    </div>
+    <button id="whatsapp-button" title="Abrir Chat">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+    </button>
+    <script src="script.js"></script>
+    
+  <script>
+    fetch('footer.html')
+      .then(res => res.text())
+      .then(html => { document.getElementById('footer').innerHTML = html; });
+  </script>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin - GYM Hub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+  <a href="index-logado.html" class="logo">GYM<span>Hub</span></a>
+    <nav class="top-right">
+      <button class="btn outline" id="btn-logout-admin">Sair</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Usuarios</h1>
+    <div id="users-table" class="card" style="padding:1rem;background:#1a1a1a;border-radius:10px;"></div>
+
+    <h2 style="margin-top:1.5rem">Detalhes do Usuário</h2>
+    <div id="user-details" class="card" style="padding:1rem;background:#1a1a1a;border-radius:10px;"></div>
+
+    <div style="height:40px"></div>
+  </main>
+
+  <div id="footer"></div>
+  <script>
+    fetch('footer.html')
+      .then(res => res.text())
+      .then(html => { document.getElementById('footer').innerHTML = html; });
+  </script>
+  <script src="admin.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>
